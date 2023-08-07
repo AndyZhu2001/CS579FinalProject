@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class DungeonGenerator : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public DungeonGenerationData dungeonGenerationData;
+    private List<Vector3Int> dungeonRooms;
+
+    private void Start(){
+        dungeonRooms = DungeonCrawlerController.GenerateDungeon(dungeonGenerationData);
+        SpawnRooms(dungeonRooms);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void SpawnRooms(IEnumerable<Vector3Int> rooms){
+        RoomController.instance.LoadRoom("Start", 0, 0);
+        foreach(Vector3Int roomLocation in rooms){
+            RoomController.instance.LoadRoom("Empty", roomLocation.x, roomLocation.z); 
+            
+        }
     }
 }
