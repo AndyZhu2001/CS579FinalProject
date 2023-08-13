@@ -13,6 +13,7 @@ public class BulletController : MonoBehaviour
     void Start()
     {
         StartCoroutine(DeathDelay());
+        transform.localScale = new Vector3(GameController.BulletSize, GameController.BulletSize, GameController.BulletSize);
         if(!isEnemyBullet){
             transform.localScale = new Vector3(GameController.BulletSize, GameController.BulletSize, GameController.BulletSize);
         }   
@@ -44,6 +45,10 @@ public class BulletController : MonoBehaviour
         if(other.tag == "Enemy" && !isEnemyBullet){
             other.GetComponent<EnemyController>().Death();
             Destroy(gameObject);
+        }
+        else if(other.tag == "Boss" && !isEnemyBullet){
+            Debug.Log("hit!");
+            other.GetComponent<BossHeartController>().getDemage(3);
         }
         else if(other.tag == "Player" && isEnemyBullet){
             GameController.DamagePlayer(1);

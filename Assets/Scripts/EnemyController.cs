@@ -112,9 +112,10 @@ public class EnemyController : MonoBehaviour
                     StartCoroutine(CoolDown());
                 break;
                 case(EnemyType.Ranged):
+                    //Debug.Log("correct type");
                     GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation) as GameObject;
                     bullet.GetComponent<BulletController>().GetPlayer(player.transform);
-                    bullet.AddComponent<Rigidbody2D>().gravityScale = 0;
+                    bullet.AddComponent<Rigidbody>().useGravity = false;
                     bullet.GetComponent<BulletController>().isEnemyBullet = true;
                     StartCoroutine(CoolDown());
                 break;

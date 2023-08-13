@@ -10,8 +10,10 @@ public class GameController : MonoBehaviour
     private static float health = 6;
     private static float maxHealth = 6;
     public static float moveSpeed = 5f;
-    private static float fireRate = 0.5f;
+    private static float fireRate = 1f;
     private static float bulletSize = 0.5f;
+    public GameObject WinUI;
+    public GameObject LoseUI;
 
     public static float Health{get => health; set => health = value;}
     public static float MaxHealth{get => maxHealth; set => maxHealth = value;}
@@ -25,9 +27,17 @@ public class GameController : MonoBehaviour
         }
     }
 
+    void Update(){
+        if(health <= 0){
+            LoseUI.SetActive(true);
+            Time.timeScale = 0;
+
+        }
+    }
+
     public static void DamagePlayer(float damage){
         health -= damage;
-        if(health < 0){
+        if(health <= 0){
             KillPlayer();
         }
     }
@@ -49,6 +59,6 @@ public class GameController : MonoBehaviour
     }
 
     private static void KillPlayer(){
-
+        //Destroy(PlayerController.player);
     }
 }

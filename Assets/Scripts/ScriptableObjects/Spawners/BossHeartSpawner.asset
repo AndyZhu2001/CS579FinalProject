@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1128fdbe863593d4990e4eebd1e9bcaa, type: 3}
+  m_Name: BossHeartSpawner
+  m_EditorClassIdentifier: 
+  itemToSpawn: {fileID: 7568312378059187744, guid: 2ab85ef845316de47a8270860c71b0ef, type: 3}
+  minSpawn: 1
+  maxSpawn: 1

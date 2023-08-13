@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    //public GameObject player;
+    public static GameObject player;
     public float speed;
     Rigidbody rigidbody;
     //public CharacterController controller;
@@ -16,6 +16,12 @@ public class PlayerController : MonoBehaviour
     private float rotateSpeed = 75f;
 
 
+    void Awake(){
+        if(player == null){
+            player = gameObject;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {   
@@ -25,7 +31,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log("player's transform: " + transform);
         fireDelay = GameController.FireRate;
         speed = GameController.MoveSpeed;
 
@@ -34,7 +39,6 @@ public class PlayerController : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
         float mouseRotate = Input.GetAxis("Mouse X");
 
-        //controller.Move(new Vector3(horizontal * speed * Time.deltaTime, 0, vertical * speed * Time.deltaTime));
 
         if(Input.GetAxis("Fire") > 0 && Time.time > lastFire + fireDelay){
             //Vector3 x = transform.forward();
@@ -75,7 +79,7 @@ public class PlayerController : MonoBehaviour
     void Shoot(){
         Vector3 offsetPos = transform.position + transform.forward;
         //offsetPos.z += 2;
-        GameObject bullet = Instantiate(bulletPrefab, offsetPos, transform.rotation) as GameObject;
+        GameObject bullet = Instantiate(bulletPrefab, offsetPos + new Vector3(0, 1, 0), transform.rotation) as GameObject;
         bullet.AddComponent<Rigidbody>().useGravity = false;
         Vector3 forward = transform.forward;
         forward.x = forward.x * bulletSpeed;

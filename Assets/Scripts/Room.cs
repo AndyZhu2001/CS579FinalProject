@@ -11,6 +11,10 @@ public class Room : MonoBehaviour
     public int Z;
 
     private bool updatedDoors = false;
+    private bool spawnItem = false;
+    ItemSpawner itemSpawner;
+
+    public static Vector3 TreasureRoomPosition;
 
     public Room(int x, int z){
         X = x;
@@ -61,6 +65,14 @@ public class Room : MonoBehaviour
         if(name.Contains("Boss") && !updatedDoors){
             RemoveUnconnectedDoors();
             updatedDoors = true;
+        }
+        else if(name.Contains("Treasure") && !updatedDoors){
+            RemoveUnconnectedDoors();
+            updatedDoors = true;
+        }
+
+        if(name.Contains("Treasure") && !spawnItem){
+            TreasureRoomPosition = transform.position;
         }
     }
 

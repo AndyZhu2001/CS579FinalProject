@@ -19,13 +19,19 @@ public class RoomController : MonoBehaviour
 
     RoomInfo currentLoadRoomData;
 
+    //public static Room treasureRoom;
+
     Queue<RoomInfo> loadRoomQueue = new Queue<RoomInfo>();
 
     public List<Room> loadedRooms = new List<Room>();
 
+    public Room currRoom;
+
     bool isLoadingRoom = false;
 
     bool spawnedBossRoom = false;
+
+    bool spawnedTreasureRoom = false;
 
     bool updatedRooms = false;
 
@@ -50,7 +56,10 @@ public class RoomController : MonoBehaviour
             if(!spawnedBossRoom){
                 StartCoroutine(SpawnBossRoom());
             }
-            else if(spawnedBossRoom && !updatedRooms){
+            else if(!spawnedTreasureRoom){
+                StartCoroutine(SpawnTreasureRoom());
+            }
+            else if(spawnedBossRoom && spawnedTreasureRoom && !updatedRooms){
                 foreach(Room room in loadedRooms){
                     room.RemoveUnconnectedDoors();
                 }
@@ -66,14 +75,34 @@ public class RoomController : MonoBehaviour
 
     IEnumerator SpawnBossRoom(){
         spawnedBossRoom = true;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         if(loadRoomQueue.Count == 0){
             Room bossRoom = loadedRooms[loadedRooms.Count - 1];
             Room tempRoom = new Room(bossRoom.X, bossRoom.Z);
+            //Destroy(bossRoom.gameObject.)
+            foreach (Transform child in bossRoom.gameObject.transform) {
+                Destroy(child.gameObject);
+            }
             Destroy(bossRoom.gameObject);
             var roomToRemove = loadedRooms.Single(r => r.X == tempRoom.X && r.Z == tempRoom.Z);
             loadedRooms.Remove(roomToRemove);
             LoadRoom("Boss", tempRoom.X, tempRoom.Z);
+        }
+    }
+
+    IEnumerator SpawnTreasureRoom(){
+        spawnedTreasureRoom = true;
+        yield return new WaitForSeconds(0.4f);
+        if(loadRoomQueue.Count == 0){
+            Room treasureRoom = loadedRooms[loadedRooms.Count - 3];
+            Room tempRoom = new Room(treasureRoom.X, treasureRoom.Z);
+            foreach (Transform child in treasureRoom.gameObject.transform) {
+                Destroy(child.gameObject);
+            }
+            Destroy(treasureRoom.gameObject);
+            var roomToRemove = loadedRooms.Single(r => r.X == tempRoom.X && r.Z == tempRoom.Z);
+            loadedRooms.Remove(roomToRemove);
+            LoadRoom("Treasure", tempRoom.X, tempRoom.Z);
         }
     }
 
@@ -107,10 +136,12 @@ public class RoomController : MonoBehaviour
                 currentLoadRoomData.Z * room.Length
             );
 
+            //room.currRoomTransform = room.transform.position;
+
             room.X = currentLoadRoomData.X;
             room.Z = currentLoadRoomData.Z;
             room.name = currentWorldName + "-" + currentLoadRoomData.name + " " + room.X + ", " + room.Z;
-            //room.transform.parent = transform;
+            room.transform.parent = transform;
 
             isLoadingRoom = false;
 
@@ -128,5 +159,14 @@ public class RoomController : MonoBehaviour
 
     public Room FindRoom(int x, int z){
         return loadedRooms.Find(item => item.X == x && item.Z == z);
+    }
+
+    public string GetRandomRoomName(){
+        string[] possibleRooms = new string[]{
+            "Empty",
+            "Basic1"
+        };
+
+        return possibleRooms[Random.Range(0, possibleRooms.Length)];
     }
 }
